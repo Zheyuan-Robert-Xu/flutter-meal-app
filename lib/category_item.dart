@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meal_app/category_meals_screen.dart';
+import './category_meals_screen.dart';
 
 class CategoryItem extends StatelessWidget {
   final String? id;
@@ -9,8 +9,9 @@ class CategoryItem extends StatelessWidget {
   CategoryItem({this.id, this.title, this.color});
 
   void selectCategory(BuildContext ctx) {
+    // push() navigates to a new screen by creating it 'on the fly', pushName() can only load screens which were registered in advance.
     Navigator.of(ctx).pushNamed(
-      '/category-meals',
+      CategoryMealsScreen.routeName,
       arguments: {'id': id, 'title': title},
     ); //on the stack, MaterialPageRoute as a wrapper to handle things like the animation from the old page
   }
