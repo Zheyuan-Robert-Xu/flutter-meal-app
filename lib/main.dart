@@ -1,19 +1,57 @@
 import 'package:flutter/material.dart';
 
+import './dummy_data.dart';
 import './screens/filters_screen.dart';
 import './screens/tabs_screen.dart';
 import './screens/meal_detail_screen.dart';
 import './screens/category_meals_screen.dart';
 import './screens/categories_screen.dart';
+import './models/meal.dart';
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> _filters = {
+    'gluten': false,
+    'lactose': false,
+    'vegan': false,
+    'vegetarian': false,
+  };
+
+  List<Meal> _availableMeals = DUMMY_MEALS;
+
+  void _setFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+      _availableMeals = DUMMY_MEALS.where((meal) {
+        if (_filters['gluten']! && !meal.isGlutenFree!) {
+          return false; // where return false not include the item
+        }
+        if (_filters['lactose']! && !meal.isLactoseFree!) {
+          return false; // where return false not include the item
+        }
+        if (_filters['vegan']! && !meal.isVegan!) {
+          return false; // where return false not include the item
+        }
+        if (_filters['vegetarian']! && !meal.isVegetarian!) {
+          return false; // where return false not include the item
+        }
+        return true;
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'DeliMeals',
       theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -36,10 +74,10 @@ class MyApp extends StatelessWidget {
       initialRoute: '/', //default is '/'
       routes: {
         '/': (ctx) => TabsScreen(), // for home
-        CategoryMealsScreen.routeName: (ctx) =>
-            CategoryMealsScreen(), // routeName in CategoryMealsScreen
+        CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(
+            _availableMeals), // routeName in CategoryMealsScreen
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
-        FilterScreen.routeName: (ctx) => FilterScreen(),
+        FilterScreen.routeName: (ctx) => FilterScreen(_filters, _setFilters),
       },
       onGenerateRoute: (settings) {
         // click the route appart from the roudes above
