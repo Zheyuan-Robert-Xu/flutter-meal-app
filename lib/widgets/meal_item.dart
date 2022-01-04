@@ -9,7 +9,6 @@ class MealItem extends StatelessWidget {
   final int? duration;
   final Complexity? complexity;
   final Affordability? affordability;
-  final Function? removeItem;
 
   MealItem({
     required this.id,
@@ -18,7 +17,6 @@ class MealItem extends StatelessWidget {
     required this.affordability,
     required this.complexity,
     required this.duration,
-    required this.removeItem,
   });
 
   String get complexityText {
@@ -56,7 +54,7 @@ class MealItem extends StatelessWidget {
         .then((result) {
       // then triggers as soon as the new screen that was loaded via push
       if (result != null) {
-        removeItem!(result);
+        // removeItem!(result);
       } //if passing any result to the pop method, get the result here--meal_detail_screen.dart floatingActionButton
     }); // routeName as the identifier of route, pass the data of id
   }

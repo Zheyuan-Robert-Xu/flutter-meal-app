@@ -1,31 +1,43 @@
 import 'package:flutter/material.dart';
 
+import '../models/meal.dart';
 import './favorites_screen.dart';
 import '../widgets/main_drawer.dart';
-
 import './categories_screen.dart';
 
 class TabsScreen extends StatefulWidget {
-  const TabsScreen({Key? key}) : super(key: key);
+  final List<Meal> favoriteMeals;
+
+  TabsScreen(this.favoriteMeals);
 
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Map<String, dynamic>> _pages = [
-    {'page': CategoriesScreen(), 'title': 'Categories'},
-    {
-      'page': FavoritesScreen(),
-      'title': 'Your Favorite',
-    }
-  ];
-  int _selectedPageIndex = 0;
+  late List<Map<String, dynamic>> _pages;
+  int _selectedPageIndex =
+      0; // when initializing a class in this property, cannot
+  //refer to any other property because the creation of the class is not fully finished
 
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    _pages = [
+      {'page': CategoriesScreen(), 'title': 'Categories'},
+      {
+        'page': FavoritesScreen(widget
+            .favoriteMeals), // widget can be used in the build method, initState
+        // run before build excute
+        'title': 'Your Favorite',
+      }
+    ];
+    super.initState();
   }
 
   @override
